@@ -3,6 +3,7 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
+import Fab from '@mui/material/Fab'
 import FormControl from '@mui/material/FormControl'
 import Grid from '@mui/material/Grid'
 import InputLabel from '@mui/material/InputLabel'
@@ -10,19 +11,15 @@ import MenuItem from '@mui/material/MenuItem'
 import Pagination from '@mui/material/Pagination'
 import Select from '@mui/material/Select'
 import Skeleton from '@mui/material/Skeleton'
-import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import AddIcon from '@mui/icons-material/Add'
-import CategoryIcon from '@mui/icons-material/Category'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import SearchIcon from '@mui/icons-material/Search'
 import InputAdornment from '@mui/material/InputAdornment'
-import Divider from '@mui/material/Divider'
 import ProductCard from '../components/ProductCard'
 import ProductFormModal from '../components/ProductFormModal'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
-import CategoryManagerModal from '../components/CategoryManagerModal'
 import { useAuth } from '../contexts/AuthContext'
 import api from '../services/api'
 
@@ -44,7 +41,6 @@ export default function ProductListPage() {
   const [editProduct,    setEditProduct]    = useState(null)
   const [deleteProduct,  setDeleteProduct]  = useState(null)
   const [deleteLoading,  setDeleteLoading]  = useState(false)
-  const [categoryOpen,   setCategoryOpen]   = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -109,8 +105,6 @@ export default function ProductListPage() {
           py: { xs: 6, md: 10 },
           px: 2,
           bgcolor: 'background.default',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
         }}
       >
         <Typography variant="h3" mb={1.5}>
@@ -121,10 +115,10 @@ export default function ProductListPage() {
         </Typography>
       </Box>
 
-      <Container maxWidth="xl" sx={{ py: 5 }}>
-        {/* Filters + Admin actions */}
-        <Grid container spacing={2} mb={2} alignItems="center">
-          <Grid size={{ xs: 12, md: isAuthenticated ? 6 : 8 }}>
+      <Container maxWidth="xl" sx={{ pt: 6, pb: isAuthenticated ? 12 : 6 }}>
+        {/* Filters */}
+        <Grid container spacing={2} alignItems="center">
+          <Grid size={{ xs: 12, md: 8 }}>
             <TextField
               fullWidth
               placeholder="Buscar produtos..."
@@ -141,7 +135,7 @@ export default function ProductListPage() {
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: isAuthenticated ? 3 : 4 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <FormControl fullWidth>
               <InputLabel>Categoria</InputLabel>
               <Select value={category} label="Categoria" onChange={handleCategoryChange}>
@@ -154,31 +148,9 @@ export default function ProductListPage() {
               </Select>
             </FormControl>
           </Grid>
-          {isAuthenticated && (
-            <Grid size={{ xs: 12, md: 3 }}>
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setCreateOpen(true)}
-                  fullWidth
-                >
-                  Novo Produto
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={<CategoryIcon />}
-                  onClick={() => setCategoryOpen(true)}
-                  fullWidth
-                >
-                  Categorias
-                </Button>
-              </Stack>
-            </Grid>
-          )}
         </Grid>
 
-        <Divider sx={{ mb: 4 }} />
+        <Box sx={{ height: 48 }} />
 
         {error && (
           <Alert
@@ -209,6 +181,7 @@ export default function ProductListPage() {
                   <ProductCard
                     id={product.id}
                     name={product.name}
+                    description={product.description}
                     price={product.price}
                     image_url={product.image_url}
                     category={product.category}
@@ -266,10 +239,16 @@ export default function ProductListPage() {
         loading={deleteLoading}
       />
 
-      <CategoryManagerModal
-        open={categoryOpen}
-        onClose={() => setCategoryOpen(false)}
-      />
+      {isAuthenticated && (
+        <Fab
+          color="primary"
+          aria-label="novo produto"
+          onClick={() => setCreateOpen(true)}
+          sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1200 }}
+        >
+          <AddIcon />
+        </Fab>
+      )}
     </Box>
   )
 }

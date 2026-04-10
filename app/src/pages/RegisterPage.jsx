@@ -4,7 +4,6 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
@@ -28,8 +27,9 @@ export default function RegisterPage() {
     const e = {}
     if (!name)               e.name     = 'Nome é obrigatório'
     if (!email)              e.email    = 'Email é obrigatório'
-    if (!password)           e.password = 'Senha é obrigatória'
-    else if (password.length < 8) e.password = 'Senha deve ter no mínimo 8 caracteres'
+    if (!password)                e.password = 'Senha é obrigatória'
+    else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/.test(password))
+      e.password = 'Senha deve ter no mínimo 8 caracteres, letra maiúscula, minúscula, número e símbolo'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -41,8 +41,8 @@ export default function RegisterPage() {
     setLoading(true)
     setApiError(null)
     try {
-      const { data } = await api.post('/register', { name, email, password })
-      login(data.token)
+      const { data } = await api.post('/register', { name, email, password, password_confirmation: password })
+      login(data.token, data.data)
       navigate('/')
     } catch (err) {
       if (err.response?.data?.errors?.email) {
@@ -63,101 +63,96 @@ export default function RegisterPage() {
 
   return (
     <Box
-      minHeight="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={2}
-      sx={{ bgcolor: 'background.default' }}
+      sx={{
+        minHeight: 'calc(100vh - 64px)',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'background.default',
+        px: 2,
+      }}
     >
-      <Paper
-        elevation={0}
-        sx={{
-          width: '100%',
-          maxWidth: 420,
-          p: 4,
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 2,
-        }}
-      >
-        {/* Logo */}
-        <Box display="flex" alignItems="center" gap={1} mb={3}>
-          <ShoppingBagOutlinedIcon sx={{ color: 'secondary.main', fontSize: 28 }} />
-          <Typography
-            variant="h5"
-            sx={{ fontFamily: '"DM Serif Display", serif', color: 'text.primary' }}
-          >
-            ShopEasy
-          </Typography>
-        </Box>
-
-        <Typography variant="h6" fontWeight={700} mb={0.5}>
-          Criar conta
+      {/* Logo */}
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, mb: 3 }}>
+        <ShoppingBagOutlinedIcon sx={{ color: 'secondary.main', fontSize: 32 }} />
+        <Typography
+          variant="h5"
+          sx={{ fontFamily: '"DM Serif Display", serif', color: 'text.primary' }}
+        >
+          ShopEasy
         </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          Preencha os campos abaixo para se cadastrar
+      </Box>
+
+      <Typography variant="h4" sx={{ textAlign: 'center' }} mb={0.5}>
+        Criar conta
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }} mb={4}>
+        Preencha os campos abaixo para se cadastrar
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%', maxWidth: 400 }}>
+        <TextField
+          label="Nome"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          error={!!errors.name}
+          helperText={errors.name}
+          margin="normal"
+          autoComplete="name"
+        />
+        <TextField
+          label="E-mail"
+          type="email"
+          fullWidth
+          placeholder="seu@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          helperText={errors.email}
+          margin="normal"
+          autoComplete="email"
+        />
+        <TextField
+          label="Senha"
+          type="password"
+          fullWidth
+          placeholder="Ex: Senha@123"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={!!errors.password}
+          helperText={errors.password}
+          margin="normal"
+          autoComplete="new-password"
+        />
+
+        {apiError && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {apiError}
+          </Alert>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="secondary"
+          fullWidth
+          size="large"
+          disabled={loading}
+          sx={{ mt: 3, mb: 2, py: 1.5 }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Cadastrar'}
+        </Button>
+
+        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+          Já tem uma conta?{' '}
+          <Link to="/login" style={{ color: '#C25A36', textDecoration: 'none', fontWeight: 600 }}>
+            Entrar
+          </Link>
         </Typography>
-
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <TextField
-            label="Nome"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            error={!!errors.name}
-            helperText={errors.name}
-            margin="normal"
-            autoComplete="name"
-          />
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={!!errors.email}
-            helperText={errors.email}
-            margin="normal"
-            autoComplete="email"
-          />
-          <TextField
-            label="Senha"
-            type="password"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={!!errors.password}
-            helperText={errors.password}
-            margin="normal"
-            autoComplete="new-password"
-          />
-
-          {apiError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {apiError}
-            </Alert>
-          )}
-
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            size="large"
-            disabled={loading}
-            sx={{ mt: 3, mb: 2, py: 1.5 }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Criar conta'}
-          </Button>
-
-          <Typography variant="body2" color="text.secondary" textAlign="center">
-            Já tem uma conta?{' '}
-            <Link to="/login" style={{ color: '#C25A36', textDecoration: 'none', fontWeight: 600 }}>
-              Faça login
-            </Link>
-          </Typography>
-        </Box>
-      </Paper>
+      </Box>
     </Box>
   )
 }

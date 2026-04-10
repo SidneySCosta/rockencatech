@@ -4,7 +4,6 @@ import Alert from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined'
@@ -39,7 +38,7 @@ export default function LoginPage() {
     setApiError(null)
     try {
       const { data } = await api.post('/login', { email, password })
-      login(data.token)
+      login(data.token, data.data)
       navigate('/')
     } catch (err) {
       if (err.response?.status === 401) {
@@ -54,91 +53,86 @@ export default function LoginPage() {
 
   return (
     <Box
-      minHeight="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      px={2}
-      sx={{ bgcolor: 'background.default' }}
+      sx={{
+        minHeight: 'calc(100vh - 64px)',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'background.default',
+        px: 2,
+      }}
     >
-      <Paper
-        elevation={0}
-        sx={{
-          width: '100%',
-          maxWidth: 420,
-          p: 4,
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 2,
-        }}
-      >
-        {/* Logo */}
-        <Box display="flex" alignItems="center" gap={1} mb={3}>
-          <ShoppingBagOutlinedIcon sx={{ color: 'secondary.main', fontSize: 28 }} />
-          <Typography
-            variant="h5"
-            sx={{ fontFamily: '"DM Serif Display", serif', color: 'text.primary' }}
-          >
-            ShopEasy
-          </Typography>
-        </Box>
-
-        <Typography variant="h6" fontWeight={700} mb={0.5}>
-          Entrar na sua conta
+      {/* Logo */}
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, mb: 3 }}>
+        <ShoppingBagOutlinedIcon sx={{ color: 'secondary.main', fontSize: 32 }} />
+        <Typography
+          variant="h5"
+          sx={{ fontFamily: '"DM Serif Display", serif', color: 'text.primary' }}
+        >
+          ShopEasy
         </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          Insira seus dados para continuar
+      </Box>
+
+      <Typography variant="h4" sx={{ textAlign: 'center' }} mb={0.5}>
+        Entrar na sua conta
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }} mb={4}>
+        Insira seus dados para continuar
+      </Typography>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '100%', maxWidth: 400 }}>
+        <TextField
+          label="E-mail"
+          type="email"
+          fullWidth
+          placeholder="seu@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          helperText={errors.email}
+          margin="normal"
+          autoComplete="email"
+        />
+        <TextField
+          label="Senha"
+          type="password"
+          fullWidth
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={!!errors.password}
+          helperText={errors.password}
+          margin="normal"
+          autoComplete="current-password"
+        />
+
+        {apiError && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {apiError}
+          </Alert>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="secondary"
+          fullWidth
+          size="large"
+          disabled={loading}
+          sx={{ mt: 3, mb: 2, py: 1.5 }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Entrar'}
+        </Button>
+
+        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+          Não tem uma conta?{' '}
+          <Link to="/register" style={{ color: '#C25A36', textDecoration: 'none', fontWeight: 600 }}>
+            Cadastre-se
+          </Link>
         </Typography>
-
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <TextField
-            label="Email"
-            type="email"
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={!!errors.email}
-            helperText={errors.email}
-            margin="normal"
-            autoComplete="email"
-          />
-          <TextField
-            label="Senha"
-            type="password"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={!!errors.password}
-            helperText={errors.password}
-            margin="normal"
-            autoComplete="current-password"
-          />
-
-          {apiError && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {apiError}
-            </Alert>
-          )}
-
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            size="large"
-            disabled={loading}
-            sx={{ mt: 3, mb: 2, py: 1.5 }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Entrar'}
-          </Button>
-
-          <Typography variant="body2" color="text.secondary" textAlign="center">
-            Não tem uma conta?{' '}
-            <Link to="/register" style={{ color: '#C25A36', textDecoration: 'none', fontWeight: 600 }}>
-              Cadastre-se
-            </Link>
-          </Typography>
-        </Box>
-      </Paper>
+      </Box>
     </Box>
   )
 }

@@ -142,9 +142,6 @@ export default function ProductDetailPage() {
                 </>
               )}
 
-              <Button variant="contained" size="large" sx={{ mt: 4, px: 5, py: 1.5 }}>
-                Adicionar ao carrinho
-              </Button>
             </>
           )}
         </Box>

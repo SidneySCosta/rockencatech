@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 const formatBRL = (value) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value)
 
-export default function ProductCard({ id, name, price, image_url, category, showActions, onEdit, onDelete }) {
+export default function ProductCard({ id, name, description, price, image_url, category, showActions, onEdit, onDelete }) {
   return (
     <Box sx={{ position: 'relative', height: '100%' }}>
       <Card
@@ -67,6 +67,21 @@ export default function ProductCard({ id, name, price, image_url, category, show
             >
               {name}
             </Typography>
+            {description && (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  mb: 1,
+                }}
+              >
+                {description}
+              </Typography>
+            )}
             <Chip
               label={category?.name}
               size="small"
