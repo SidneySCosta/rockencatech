@@ -10,16 +10,25 @@ import MenuItem from '@mui/material/MenuItem'
 import Pagination from '@mui/material/Pagination'
 import Select from '@mui/material/Select'
 import Skeleton from '@mui/material/Skeleton'
+import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import AddIcon from '@mui/icons-material/Add'
+import CategoryIcon from '@mui/icons-material/Category'
 import CheckroomIcon from '@mui/icons-material/Checkroom'
 import SearchIcon from '@mui/icons-material/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import Divider from '@mui/material/Divider'
 import ProductCard from '../components/ProductCard'
+import ProductFormModal from '../components/ProductFormModal'
+import DeleteConfirmDialog from '../components/DeleteConfirmDialog'
+import CategoryManagerModal from '../components/CategoryManagerModal'
+import { useAuth } from '../contexts/AuthContext'
 import api from '../services/api'
 
 export default function ProductListPage() {
+  const { isAuthenticated } = useAuth()
+
   const [products,        setProducts]        = useState([])
   const [meta,            setMeta]            = useState({ total: 0, last_page: 1, current_page: 1, per_page: 12 })
   const [categories,      setCategories]      = useState([])
@@ -29,6 +38,13 @@ export default function ProductListPage() {
   const [category,        setCategory]        = useState('')
   const [page,            setPage]            = useState(1)
   const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  // Modal state
+  const [createOpen,     setCreateOpen]     = useState(false)
+  const [editProduct,    setEditProduct]    = useState(null)
+  const [deleteProduct,  setDeleteProduct]  = useState(null)
+  const [deleteLoading,  setDeleteLoading]  = useState(false)
+  const [categoryOpen,   setCategoryOpen]   = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -73,6 +89,17 @@ export default function ProductListPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  async function handleDeleteConfirm() {
+    setDeleteLoading(true)
+    try {
+      await api.delete(`/products/${deleteProduct.id}`)
+      setProducts((prev) => prev.filter((p) => p.id !== deleteProduct.id))
+      setDeleteProduct(null)
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
   return (
     <Box>
       {/* Hero */}
@@ -95,9 +122,9 @@ export default function ProductListPage() {
       </Box>
 
       <Container maxWidth="xl" sx={{ py: 5 }}>
-        {/* Filters */}
-        <Grid container spacing={2} mb={4}>
-          <Grid size={{ xs: 12, md: 8 }}>
+        {/* Filters + Admin actions */}
+        <Grid container spacing={2} mb={2} alignItems="center">
+          <Grid size={{ xs: 12, md: isAuthenticated ? 6 : 8 }}>
             <TextField
               fullWidth
               placeholder="Buscar produtos..."
@@ -114,7 +141,7 @@ export default function ProductListPage() {
               }}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: isAuthenticated ? 3 : 4 }}>
             <FormControl fullWidth>
               <InputLabel>Categoria</InputLabel>
               <Select value={category} label="Categoria" onChange={handleCategoryChange}>
@@ -127,6 +154,28 @@ export default function ProductListPage() {
               </Select>
             </FormControl>
           </Grid>
+          {isAuthenticated && (
+            <Grid size={{ xs: 12, md: 3 }}>
+              <Stack direction="row" spacing={1}>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => setCreateOpen(true)}
+                  fullWidth
+                >
+                  Novo Produto
+                </Button>
+                <Button
+                  variant="outlined"
+                  startIcon={<CategoryIcon />}
+                  onClick={() => setCategoryOpen(true)}
+                  fullWidth
+                >
+                  Categorias
+                </Button>
+              </Stack>
+            </Grid>
+          )}
         </Grid>
 
         <Divider sx={{ mb: 4 }} />
@@ -163,6 +212,9 @@ export default function ProductListPage() {
                     price={product.price}
                     image_url={product.image_url}
                     category={product.category}
+                    showActions={isAuthenticated}
+                    onEdit={() => setEditProduct(product)}
+                    onDelete={() => setDeleteProduct(product)}
                   />
                 </Grid>
               ))}
@@ -189,6 +241,35 @@ export default function ProductListPage() {
           </Box>
         )}
       </Container>
+
+      {/* Modais */}
+      <ProductFormModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onSuccess={fetchProducts}
+        product={null}
+      />
+
+      <ProductFormModal
+        open={!!editProduct}
+        onClose={() => setEditProduct(null)}
+        onSuccess={fetchProducts}
+        product={editProduct}
+      />
+
+      <DeleteConfirmDialog
+        open={!!deleteProduct}
+        onClose={() => setDeleteProduct(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Excluir produto"
+        description={`Tem certeza que deseja excluir "${deleteProduct?.name}"?`}
+        loading={deleteLoading}
+      />
+
+      <CategoryManagerModal
+        open={categoryOpen}
+        onClose={() => setCategoryOpen(false)}
+      />
     </Box>
   )
 }
