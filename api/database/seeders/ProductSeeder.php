@@ -13,30 +13,37 @@ class ProductSeeder extends Seeder
         $categories = Category::pluck('id', 'name');
 
         $products = [
-            // Guitars
-            ['name' => 'Fender Stratocaster', 'description' => 'Guitarra elétrica clássica com corpo em alder e braço em maple.', 'price' => 1299.99, 'category' => 'Guitars', 'image_url' => null],
-            ['name' => 'Gibson Les Paul Standard', 'description' => 'Icônica guitarra elétrica de corpo sólido com captadores humbucker.', 'price' => 2499.00, 'category' => 'Guitars', 'image_url' => null],
-            ['name' => 'Taylor 214ce', 'description' => 'Violão eletroacústico grand auditorium com tampo em abeto.', 'price' => 999.00, 'category' => 'Guitars', 'image_url' => null],
-            ['name' => 'Epiphone Les Paul Classic', 'description' => 'Les Paul acessível com captadores ProBucker.', 'price' => 449.00, 'category' => 'Guitars', 'image_url' => null],
+            // Notebooks
+            ['name' => 'Apple MacBook Pro 14" M3', 'description' => 'Notebook profissional com chip M3, tela Liquid Retina XDR de 14 polegadas e até 18h de bateria.', 'price' => 12999.00, 'category' => 'Notebooks', 'image_url' => null],
+            ['name' => 'Apple MacBook Air 15" M2', 'description' => 'Notebook ultrafino com chip M2, tela de 15 polegadas e design sem ventilador.', 'price' => 9999.00, 'category' => 'Notebooks', 'image_url' => null],
+            ['name' => 'Dell XPS 15', 'description' => 'Notebook premium com tela OLED 4K, processador Intel Core i9 e placa de vídeo dedicada NVIDIA.', 'price' => 11499.00, 'category' => 'Notebooks', 'image_url' => null],
+            ['name' => 'Samsung Galaxy Book4 Pro', 'description' => 'Notebook fino com tela AMOLED, Intel Core Ultra e integração com ecossistema Galaxy.', 'price' => 7499.00, 'category' => 'Notebooks', 'image_url' => null],
 
-            // Basses
-            ['name' => 'Fender Precision Bass', 'description' => 'A base do baixo moderno, referência em som e confiabilidade.', 'price' => 1149.99, 'category' => 'Basses', 'image_url' => null],
-            ['name' => 'Music Man StingRay', 'description' => 'Baixo ativo com humbucker de som encorpado e presença marcante.', 'price' => 1899.00, 'category' => 'Basses', 'image_url' => null],
-            ['name' => 'Squier Affinity Jazz Bass', 'description' => 'Baixo jazz de entrada com dois captadores single-coil.', 'price' => 299.99, 'category' => 'Basses', 'image_url' => null],
+            // Smartphones
+            ['name' => 'Apple iPhone 16 Pro', 'description' => 'Smartphone com chip A18 Pro, câmera de 48MP com zoom óptico 5x e tela Super Retina XDR de 6,3".', 'price' => 9799.00, 'category' => 'Smartphones', 'image_url' => null],
+            ['name' => 'Samsung Galaxy S24 Ultra', 'description' => 'Smartphone topo de linha com caneta S Pen integrada, câmera de 200MP e tela Dynamic AMOLED 2X.', 'price' => 8499.00, 'category' => 'Smartphones', 'image_url' => null],
+            ['name' => 'Google Pixel 9 Pro', 'description' => 'Smartphone com câmera computacional avançada, chip Tensor G4 e sete anos de atualizações garantidas.', 'price' => 6999.00, 'category' => 'Smartphones', 'image_url' => null],
 
-            // Drums
-            ['name' => 'Pearl Export 5-Piece Kit', 'description' => 'Bateria completa de 5 peças ideal para iniciantes e intermediários.', 'price' => 799.00, 'category' => 'Drums', 'image_url' => null],
-            ['name' => 'Roland TD-17KVX', 'description' => 'Bateria eletrônica com peles mesh e módulo de som avançado.', 'price' => 1799.99, 'category' => 'Drums', 'image_url' => null],
+            // Periféricos
+            ['name' => 'Apple Magic Mouse', 'description' => 'Mouse sem fio recarregável com superfície Multi-Touch e design ultrafino.', 'price' => 699.00, 'category' => 'Periféricos', 'image_url' => null],
+            ['name' => 'Apple Magic Keyboard com Touch ID', 'description' => 'Teclado sem fio compacto com Touch ID integrado e teclas de função personalizáveis.', 'price' => 899.00, 'category' => 'Periféricos', 'image_url' => null],
+            ['name' => 'Logitech MX Master 3S', 'description' => 'Mouse ergonômico de alto desempenho com scroll eletromagnético e botão silencioso.', 'price' => 549.00, 'category' => 'Periféricos', 'image_url' => null],
+            ['name' => 'Sony DualSense PS5', 'description' => 'Controle oficial do PlayStation 5 com feedback háptico e gatilhos adaptáveis.', 'price' => 449.00, 'category' => 'Periféricos', 'image_url' => null],
 
-            // Keyboards
-            ['name' => 'Yamaha P-45', 'description' => 'Piano digital com 88 teclas de ação pesada.', 'price' => 449.99, 'category' => 'Keyboards', 'image_url' => null],
-            ['name' => 'Roland FP-30X', 'description' => 'Piano digital portátil com motor de som SuperNATURAL.', 'price' => 699.00, 'category' => 'Keyboards', 'image_url' => null],
-            ['name' => 'Nord Stage 3', 'description' => 'Piano de palco profissional com seções de órgão, piano e sintetizador.', 'price' => 3999.00, 'category' => 'Keyboards', 'image_url' => null],
+            // Consoles & Games
+            ['name' => 'Sony PlayStation 5 Slim', 'description' => 'Console de nova geração com SSD ultrarrápido, ray tracing e resolução 4K a 120fps.', 'price' => 3799.00, 'category' => 'Consoles & Games', 'image_url' => null],
+            ['name' => 'Microsoft Xbox Series X', 'description' => 'Console mais potente da Microsoft com 1TB SSD, 4K nativo e retrocompatibilidade completa.', 'price' => 3599.00, 'category' => 'Consoles & Games', 'image_url' => null],
+            ['name' => 'Nintendo Switch OLED', 'description' => 'Console híbrido com tela OLED de 7 polegadas, dock incluído e modo portátil aprimorado.', 'price' => 2199.00, 'category' => 'Consoles & Games', 'image_url' => null],
 
-            // Accessories
-            ['name' => 'Ernie Ball Super Slinky Strings', 'description' => 'Cordas para guitarra elétrica calibre 9-42.', 'price' => 6.99, 'category' => 'Accessories', 'image_url' => null],
-            ['name' => 'Boss TU-3 Chromatic Tuner', 'description' => 'Afinador cromático profissional em formato de pedal.', 'price' => 89.99, 'category' => 'Accessories', 'image_url' => null],
-            ['name' => 'Mogami Gold Instrument Cable 10ft', 'description' => 'Cabo de instrumento premium com baixíssimo ruído.', 'price' => 49.99, 'category' => 'Accessories', 'image_url' => null],
+            // Áudio
+            ['name' => 'HyperX QuadCast S', 'description' => 'Microfone USB profissional com iluminação RGB, quatro padrões polares e anti-vibração integrado.', 'price' => 899.00, 'category' => 'Áudio', 'image_url' => null],
+            ['name' => 'Apple AirPods Pro 2', 'description' => 'Fone de ouvido com cancelamento ativo de ruído adaptativo, áudio espacial e chip H2.', 'price' => 1899.00, 'category' => 'Áudio', 'image_url' => null],
+            ['name' => 'Sony WH-1000XM5', 'description' => 'Headphone over-ear com o melhor cancelamento de ruído do mercado e até 30h de bateria.', 'price' => 1799.00, 'category' => 'Áudio', 'image_url' => null],
+
+            // Monitores
+            ['name' => 'Apple Studio Display', 'description' => 'Monitor 5K de 27" com tela Retina, câmera Center Stage e áudio espacial integrado.', 'price' => 14999.00, 'category' => 'Monitores', 'image_url' => null],
+            ['name' => 'LG UltraGear 27" 4K', 'description' => 'Monitor gamer 4K com painel Nano IPS, 144Hz, 1ms e compatibilidade com G-Sync e FreeSync.', 'price' => 3299.00, 'category' => 'Monitores', 'image_url' => null],
+            ['name' => 'Samsung Odyssey OLED G8', 'description' => 'Monitor curvo OLED de 34" com resolução QD-OLED, 175Hz e design premium sem bordas.', 'price' => 5999.00, 'category' => 'Monitores', 'image_url' => null],
         ];
 
         foreach ($products as $data) {
