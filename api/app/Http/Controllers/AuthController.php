@@ -37,6 +37,11 @@ class AuthController extends Controller
             ->response();
     }
 
+    public function me(Request $request): JsonResponse
+    {
+        return (new UserResource($request->user()))->response();
+    }
+
     public function logout(Request $request): JsonResponse
     {
         $this->authService->logout($request->user());

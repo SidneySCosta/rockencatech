@@ -10,11 +10,12 @@ if [ ! -f .env ]; then
 fi
 
 # Inject Docker environment variables into .env
-sed -i "s|^DB_HOST=.*|DB_HOST=${DB_HOST:-mysql}|" .env
-sed -i "s|^DB_PORT=.*|DB_PORT=${DB_PORT:-3306}|" .env
-sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE:-rockencatech}|" .env
-sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME:-rockencatech_user}|" .env
-sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD:-secret}|" .env
+sed -i "s|^#\?DB_CONNECTION=.*|DB_CONNECTION=mysql|" .env
+sed -i "s|^#\?DB_HOST=.*|DB_HOST=${DB_HOST:-mysql}|" .env
+sed -i "s|^#\?DB_PORT=.*|DB_PORT=${DB_PORT:-3306}|" .env
+sed -i "s|^#\?DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE:-rockencatech}|" .env
+sed -i "s|^#\?DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME:-rockencatech_user}|" .env
+sed -i "s|^#\?DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD:-secret}|" .env
 
 # Install PHP dependencies (volume mount masks build-time vendor/)
 if [ -f composer.json ]; then
