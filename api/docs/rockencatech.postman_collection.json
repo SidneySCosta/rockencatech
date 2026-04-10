@@ -1,0 +1,601 @@
+{
+  "info": {
+    "name": "Rockencatech API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api" },
+    { "key": "token", "value": "" },
+    { "key": "product_id", "value": "" },
+    { "key": "category_id", "value": "" },
+    { "key": "runner_email", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01 — Register",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const email = 'runner' + Date.now() + '@example.com';",
+              "pm.collectionVariables.set('runner_email', email);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Register: status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Register: retorna token', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res).to.have.property('token');",
+              "  pm.collectionVariables.set('token', res.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/register",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Teste Runner\",\n  \"email\": \"{{runner_email}}\",\n  \"password\": \"Runner@1234\",\n  \"password_confirmation\": \"Runner@1234\"\n}"
+        }
+      }
+    },
+    {
+      "name": "02 — Login com usuario registrado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Login: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Login: retorna token', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res).to.have.property('token');",
+              "  pm.collectionVariables.set('token', res.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{runner_email}}\",\n  \"password\": \"Runner@1234\"\n}"
+        }
+      }
+    },
+    {
+      "name": "03 — Login invalido (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Login invalido: status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"naoexiste@example.com\",\n  \"password\": \"senhaerrada\"\n}"
+        }
+      }
+    },
+    {
+      "name": "04 — Listar categorias (publico)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Categorias: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Categorias: retorna array', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data).to.be.an('array');",
+              "  pm.expect(res.data.length).to.be.greaterThan(0);",
+              "  pm.collectionVariables.set('category_id', res.data[0].id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/categories"
+      }
+    },
+    {
+      "name": "05 — Criar categoria (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Criar categoria: status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Criar categoria: retorna id e name', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data).to.have.property('id');",
+              "  pm.expect(res.data).to.have.property('name');",
+              "  pm.collectionVariables.set('category_id', res.data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/categories",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Categoria Runner\"\n}"
+        }
+      }
+    },
+    {
+      "name": "06 — Criar categoria sem auth (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Criar categoria sem auth: status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/categories",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Categoria Sem Auth\"\n}"
+        }
+      }
+    },
+    {
+      "name": "07 — Atualizar categoria (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Atualizar categoria: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Atualizar categoria: name atualizado', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data.name).to.eql('Categoria Atualizada');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/categories/{{category_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Categoria Atualizada\"\n}"
+        }
+      }
+    },
+    {
+      "name": "08 — Listar produtos (publico, paginado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Produtos: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Produtos: retorna data e meta', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res).to.have.property('data');",
+              "  pm.expect(res).to.have.property('meta');",
+              "  pm.expect(res.meta).to.have.property('current_page');",
+              "  pm.expect(res.meta).to.have.property('last_page');",
+              "  pm.expect(res.meta).to.have.property('per_page');",
+              "  pm.expect(res.meta).to.have.property('total');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": {
+          "raw": "{{base_url}}/products?page=1",
+          "host": ["{{base_url}}"],
+          "path": ["products"],
+          "query": [{ "key": "page", "value": "1" }]
+        }
+      }
+    },
+    {
+      "name": "09 — Filtrar produtos por categoria (publico)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Filtro categoria: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Filtro categoria: todos os produtos sao da categoria', () => {",
+              "  const res = pm.response.json();",
+              "  const categoryId = parseInt(pm.collectionVariables.get('category_id'));",
+              "  res.data.forEach(p => {",
+              "    pm.expect(p.category.id).to.eql(categoryId);",
+              "  });",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": {
+          "raw": "{{base_url}}/products?category={{category_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["products"],
+          "query": [{ "key": "category", "value": "{{category_id}}" }]
+        }
+      }
+    },
+    {
+      "name": "10 — Buscar produtos por texto (publico)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Busca: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Busca: retorna data e meta', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res).to.have.property('data');",
+              "  pm.expect(res).to.have.property('meta');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": {
+          "raw": "{{base_url}}/products?search=a",
+          "host": ["{{base_url}}"],
+          "path": ["products"],
+          "query": [{ "key": "search", "value": "a" }]
+        }
+      }
+    },
+    {
+      "name": "11 — Criar produto (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Criar produto: status 201', () => pm.response.to.have.status(201));",
+              "pm.test('Criar produto: retorna produto com id', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data).to.have.property('id');",
+              "  pm.expect(res.data).to.have.property('name');",
+              "  pm.expect(res.data).to.have.property('price');",
+              "  pm.expect(res.data).to.have.property('category');",
+              "  pm.collectionVariables.set('product_id', res.data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produto Runner\",\n  \"description\": \"Produto criado pelo runner de testes\",\n  \"price\": 99.90,\n  \"category_id\": {{category_id}},\n  \"image_url\": \"https://picsum.photos/seed/runner/400/300\"\n}"
+        }
+      }
+    },
+    {
+      "name": "12 — Criar produto sem auth (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Criar produto sem auth: status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produto Sem Auth\",\n  \"price\": 50.00,\n  \"category_id\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "13 — Criar produto invalido (422)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Criar produto invalido: status 422', () => pm.response.to.have.status(422));",
+              "pm.test('Criar produto invalido: retorna errors', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res).to.have.property('errors');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Sem name e sem price\"\n}"
+        }
+      }
+    },
+    {
+      "name": "14 — Detalhe do produto (publico)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Detalhe produto: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Detalhe produto: retorna campos completos', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data).to.have.property('id');",
+              "  pm.expect(res.data).to.have.property('name');",
+              "  pm.expect(res.data).to.have.property('description');",
+              "  pm.expect(res.data).to.have.property('price');",
+              "  pm.expect(res.data).to.have.property('image_url');",
+              "  pm.expect(res.data).to.have.property('category');",
+              "  pm.expect(res.data.category).to.have.property('id');",
+              "  pm.expect(res.data.category).to.have.property('name');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/products/{{product_id}}"
+      }
+    },
+    {
+      "name": "15 — Detalhe produto inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Produto inexistente: status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/products/999999"
+      }
+    },
+    {
+      "name": "16 — Atualizar produto (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Atualizar produto: status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Atualizar produto: name atualizado', () => {",
+              "  const res = pm.response.json();",
+              "  pm.expect(res.data.name).to.eql('Produto Runner Atualizado');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/products/{{product_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Produto Runner Atualizado\",\n  \"description\": \"Descricao atualizada pelo runner\",\n  \"price\": 149.90,\n  \"category_id\": {{category_id}},\n  \"image_url\": \"https://picsum.photos/seed/updated/400/300\"\n}"
+        }
+      }
+    },
+    {
+      "name": "17 — Atualizar produto sem auth (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Atualizar produto sem auth: status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": "{{base_url}}/products/{{product_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Tentativa sem auth\"\n}"
+        }
+      }
+    },
+    {
+      "name": "18 — Deletar produto (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Deletar produto: status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/products/{{product_id}}"
+      }
+    },
+    {
+      "name": "19 — Produto deletado retorna 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Produto deletado: status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/products/{{product_id}}"
+      }
+    },
+    {
+      "name": "20 — Deletar produto sem auth (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Deletar produto sem auth: status 401', () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": "{{base_url}}/products/1"
+      }
+    },
+    {
+      "name": "21 — Deletar categoria (protegido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Deletar categoria: status 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/categories/{{category_id}}"
+      }
+    },
+    {
+      "name": "22 — Logout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Logout: status 200', () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set('token', '');"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{base_url}}/logout"
+      }
+    }
+  ]
+}

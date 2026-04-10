@@ -7,9 +7,9 @@
 vendor/
 node_modules/
 
-# Lock files (only if dependency didn't change)
+# Lock files
 # composer.lock
-# package-lock.json
+package-lock.json
 
 # Docker volumes / runtime
 docker/data/
