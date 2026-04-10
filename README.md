@@ -203,6 +203,18 @@ app/Http/Resources/
 
 > Endpoints protegidos requerem header: `Authorization: Bearer {token}`
 
+### Postman Collection
+
+A collection com todos os endpoints e cenários de teste está em [`api/docs/rockencatech.postman_collection.json`](api/docs/rockencatech.postman_collection.json).
+
+**Como usar:**
+
+1. Importe o arquivo no Postman: **File → Import → selecione o arquivo**
+2. Execute cenários individuais ou rode todos via **Collection Runner**
+3. O token de autenticação é capturado automaticamente após o login — nenhuma configuração manual necessária
+
+A collection cobre 22 cenários: registro, login, logout, CRUD de produtos e categorias, validações e proteção de endpoints.
+
 ---
 
 ## Frontend (React)
