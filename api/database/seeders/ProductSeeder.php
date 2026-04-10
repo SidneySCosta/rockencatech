@@ -13,37 +13,118 @@ class ProductSeeder extends Seeder
         $categories = Category::pluck('id', 'name');
 
         $products = [
-            // Notebooks
-            ['name' => 'Apple MacBook Pro 14" M3', 'description' => 'Notebook profissional com chip M3, tela Liquid Retina XDR de 14 polegadas e até 18h de bateria.', 'price' => 12999.00, 'category' => 'Notebooks', 'image_url' => null],
-            ['name' => 'Apple MacBook Air 15" M2', 'description' => 'Notebook ultrafino com chip M2, tela de 15 polegadas e design sem ventilador.', 'price' => 9999.00, 'category' => 'Notebooks', 'image_url' => null],
-            ['name' => 'Dell XPS 15', 'description' => 'Notebook premium com tela OLED 4K, processador Intel Core i9 e placa de vídeo dedicada NVIDIA.', 'price' => 11499.00, 'category' => 'Notebooks', 'image_url' => null],
-            ['name' => 'Samsung Galaxy Book4 Pro', 'description' => 'Notebook fino com tela AMOLED, Intel Core Ultra e integração com ecossistema Galaxy.', 'price' => 7499.00, 'category' => 'Notebooks', 'image_url' => null],
+            // Roupas
+            [
+                'name'        => 'Camiseta Essencial',
+                'description' => 'Camiseta confeccionada em 100% algodão orgânico, com caimento perfeito e disponível nos tamanhos P, M, G e GG. Lavável à máquina.',
+                'price'       => 89.90,
+                'category'    => 'Roupas',
+                'image_url'   => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Calça Slim',
+                'description' => 'Calça slim fit em sarja com 2% elastano para mais conforto. Bolsos frontais e traseiros, cós com passantes para cinto e fechamento em zíper e botão.',
+                'price'       => 189.90,
+                'category'    => 'Roupas',
+                'image_url'   => 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Jaqueta Oversized',
+                'description' => 'Jaqueta jeans em algodão com lavagem clara. Corte oversized, bolsos frontais com aba e fechamento em botões metálicos. Peça-chave para looks descontraídos.',
+                'price'       => 259.90,
+                'category'    => 'Roupas',
+                'image_url'   => 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Vestido Midi Floral',
+                'description' => 'Vestido midi com estampa floral delicada, confeccionado em viscose leve. Alças finas com regulagem e saia ampla. Ideal para o dia a dia e ocasiões especiais.',
+                'price'       => 219.90,
+                'category'    => 'Roupas',
+                'image_url'   => 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Moletom Classic',
+                'description' => 'Moletom unissex em fleece premium, interior felpudo para máximo conforto. Bolso canguru, punhos e barra em ribana. Lavável à máquina.',
+                'price'       => 149.90,
+                'category'    => 'Roupas',
+                'image_url'   => 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&h=600&fit=crop',
+            ],
 
-            // Smartphones
-            ['name' => 'Apple iPhone 16 Pro', 'description' => 'Smartphone com chip A18 Pro, câmera de 48MP com zoom óptico 5x e tela Super Retina XDR de 6,3".', 'price' => 9799.00, 'category' => 'Smartphones', 'image_url' => null],
-            ['name' => 'Samsung Galaxy S24 Ultra', 'description' => 'Smartphone topo de linha com caneta S Pen integrada, câmera de 200MP e tela Dynamic AMOLED 2X.', 'price' => 8499.00, 'category' => 'Smartphones', 'image_url' => null],
-            ['name' => 'Google Pixel 9 Pro', 'description' => 'Smartphone com câmera computacional avançada, chip Tensor G4 e sete anos de atualizações garantidas.', 'price' => 6999.00, 'category' => 'Smartphones', 'image_url' => null],
+            // Acessórios
+            [
+                'name'        => 'Bolsa Minimalista',
+                'description' => 'Bolsa estruturada em couro sintético premium. Compartimento principal com zíper, bolso interno e alça ajustável. Dimensões: 30x25x12 cm.',
+                'price'       => 249.90,
+                'category'    => 'Acessórios',
+                'image_url'   => 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Relógio Clássico',
+                'description' => 'Relógio com caixa em aço inoxidável de 40 mm, pulseira de couro legítimo e movimento quartz japonês. Resistente à água até 30 m.',
+                'price'       => 349.90,
+                'category'    => 'Acessórios',
+                'image_url'   => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Óculos de Sol Retrô',
+                'description' => 'Armação acetato em formato redondo com lentes polarizadas UV400. Design retrô que combina com diferentes formatos de rosto. Acompanha estojo rígido.',
+                'price'       => 179.90,
+                'category'    => 'Acessórios',
+                'image_url'   => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Cinto de Couro',
+                'description' => 'Cinto em couro legítimo curtido ao vegetal, com fivela dourada. Largura de 3 cm, disponível em múltiplos tamanhos. Versátil para looks casuais e formais.',
+                'price'       => 119.90,
+                'category'    => 'Acessórios',
+                'image_url'   => 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&h=600&fit=crop',
+            ],
 
-            // Periféricos
-            ['name' => 'Apple Magic Mouse', 'description' => 'Mouse sem fio recarregável com superfície Multi-Touch e design ultrafino.', 'price' => 699.00, 'category' => 'Periféricos', 'image_url' => null],
-            ['name' => 'Apple Magic Keyboard com Touch ID', 'description' => 'Teclado sem fio compacto com Touch ID integrado e teclas de função personalizáveis.', 'price' => 899.00, 'category' => 'Periféricos', 'image_url' => null],
-            ['name' => 'Logitech MX Master 3S', 'description' => 'Mouse ergonômico de alto desempenho com scroll eletromagnético e botão silencioso.', 'price' => 549.00, 'category' => 'Periféricos', 'image_url' => null],
-            ['name' => 'Sony DualSense PS5', 'description' => 'Controle oficial do PlayStation 5 com feedback háptico e gatilhos adaptáveis.', 'price' => 449.00, 'category' => 'Periféricos', 'image_url' => null],
+            // Calçados
+            [
+                'name'        => 'Tênis Urbano',
+                'description' => 'Tênis em couro sintético com solado emborrachado antiderrapante. Design clean e versátil para o dia a dia. Palmilha removível e numeração do 34 ao 44.',
+                'price'       => 299.90,
+                'category'    => 'Calçados',
+                'image_url'   => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Sandália de Couro',
+                'description' => 'Sandália rasteira em couro natural curtido ao vegetal. Solado em borracha reciclada, palmilha anatômica e fechamento com fivela ajustável.',
+                'price'       => 179.90,
+                'category'    => 'Calçados',
+                'image_url'   => 'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Bota Cano Médio',
+                'description' => 'Bota feminina em couro ecológico com cano de 15 cm. Salto bloco de 5 cm para mais estabilidade. Forro interno em tecido macio. Fechamento lateral em zíper.',
+                'price'       => 389.90,
+                'category'    => 'Calçados',
+                'image_url'   => 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
+            ],
 
-            // Consoles & Games
-            ['name' => 'Sony PlayStation 5 Slim', 'description' => 'Console de nova geração com SSD ultrarrápido, ray tracing e resolução 4K a 120fps.', 'price' => 3799.00, 'category' => 'Consoles & Games', 'image_url' => null],
-            ['name' => 'Microsoft Xbox Series X', 'description' => 'Console mais potente da Microsoft com 1TB SSD, 4K nativo e retrocompatibilidade completa.', 'price' => 3599.00, 'category' => 'Consoles & Games', 'image_url' => null],
-            ['name' => 'Nintendo Switch OLED', 'description' => 'Console híbrido com tela OLED de 7 polegadas, dock incluído e modo portátil aprimorado.', 'price' => 2199.00, 'category' => 'Consoles & Games', 'image_url' => null],
-
-            // Áudio
-            ['name' => 'HyperX QuadCast S', 'description' => 'Microfone USB profissional com iluminação RGB, quatro padrões polares e anti-vibração integrado.', 'price' => 899.00, 'category' => 'Áudio', 'image_url' => null],
-            ['name' => 'Apple AirPods Pro 2', 'description' => 'Fone de ouvido com cancelamento ativo de ruído adaptativo, áudio espacial e chip H2.', 'price' => 1899.00, 'category' => 'Áudio', 'image_url' => null],
-            ['name' => 'Sony WH-1000XM5', 'description' => 'Headphone over-ear com o melhor cancelamento de ruído do mercado e até 30h de bateria.', 'price' => 1799.00, 'category' => 'Áudio', 'image_url' => null],
-
-            // Monitores
-            ['name' => 'Apple Studio Display', 'description' => 'Monitor 5K de 27" com tela Retina, câmera Center Stage e áudio espacial integrado.', 'price' => 14999.00, 'category' => 'Monitores', 'image_url' => null],
-            ['name' => 'LG UltraGear 27" 4K', 'description' => 'Monitor gamer 4K com painel Nano IPS, 144Hz, 1ms e compatibilidade com G-Sync e FreeSync.', 'price' => 3299.00, 'category' => 'Monitores', 'image_url' => null],
-            ['name' => 'Samsung Odyssey OLED G8', 'description' => 'Monitor curvo OLED de 34" com resolução QD-OLED, 175Hz e design premium sem bordas.', 'price' => 5999.00, 'category' => 'Monitores', 'image_url' => null],
+            // Casa
+            [
+                'name'        => 'Vela Aromática',
+                'description' => 'Vela artesanal em cera de soja 100% natural com fragrância de baunilha e notas de âmbar. Tempo de queima de aproximadamente 45 horas. Pote reutilizável em cerâmica.',
+                'price'       => 79.90,
+                'category'    => 'Casa',
+                'image_url'   => 'https://images.unsplash.com/photo-1602607753498-39524fe5e903?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Almofada Decorativa',
+                'description' => 'Almofada decorativa em linho 100% natural com textura artesanal. Enchimento em fibra siliconada antialérgica. Dimensões: 45x45 cm. Capa removível com zíper invisível.',
+                'price'       => 119.90,
+                'category'    => 'Casa',
+                'image_url'   => 'https://images.unsplash.com/photo-1629949009765-40fc74c9ec21?w=600&h=600&fit=crop',
+            ],
+            [
+                'name'        => 'Xícara de Cerâmica',
+                'description' => 'Xícara artesanal em cerâmica de alta temperatura, com acabamento fosco e alça ergonômica. Capacidade de 300 ml. Vai ao micro-ondas e à lava-louças.',
+                'price'       => 64.90,
+                'category'    => 'Casa',
+                'image_url'   => 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=600&fit=crop',
+            ],
         ];
 
         foreach ($products as $data) {
