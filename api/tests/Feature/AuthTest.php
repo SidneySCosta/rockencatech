@@ -17,9 +17,10 @@ class AuthTest extends TestCase
     public function test_register_creates_user_and_returns_token(): void
     {
         $response = $this->postJson('/api/register', [
-            'name'     => 'João Silva',
-            'email'    => 'joao@example.com',
-            'password' => 'password123',
+            'name'                  => 'João Silva',
+            'email'                 => 'joao@example.com',
+            'password'              => 'Test@1234',
+            'password_confirmation' => 'Test@1234',
         ]);
 
         $response->assertStatus(201)
@@ -34,14 +35,15 @@ class AuthTest extends TestCase
     public function test_register_hashes_password(): void
     {
         $this->postJson('/api/register', [
-            'name'     => 'Test',
-            'email'    => 'test@example.com',
-            'password' => 'password123',
+            'name'                  => 'Test',
+            'email'                 => 'test@example.com',
+            'password'              => 'Test@1234',
+            'password_confirmation' => 'Test@1234',
         ]);
 
         $user = User::where('email', 'test@example.com')->first();
 
-        $this->assertNotEquals('password123', $user->password);
+        $this->assertNotEquals('Test@1234', $user->password);
     }
 
     public function test_register_fails_with_duplicate_email(): void
