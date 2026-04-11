@@ -4,6 +4,8 @@ Catálogo de produtos para e-commerce com autenticação de usuários via **Lara
 
 > Backend: Laravel 11 + MySQL · Frontend: React (Vite) · Auth: Laravel Sanctum · Docker Compose
 
+**Demo:** https://rockencatech-app.vercel.app/
+
 ---
 
 ## Pré-requisitos
